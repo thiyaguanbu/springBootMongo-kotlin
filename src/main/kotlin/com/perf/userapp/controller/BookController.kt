@@ -1,5 +1,7 @@
 package com.perf.userapp.controller
 
+import com.perf.userapp.kafkaengine.KafkaProducerConfig
+import com.perf.userapp.messageservice.MessageProducer
 import com.perf.userapp.model.Book
 import com.perf.userapp.service.BookService
 import org.springframework.data.domain.Page
@@ -10,7 +12,7 @@ import java.util.*
 
 @RestController//declare this class as rest controller able to catch http request
 @RequestMapping("api/book")//controller root path
-class BookController (private val bookService: BookService) {//injects bookService by constructor
+class BookController (private val bookService: BookService, private val messageProducer: MessageProducer) {//injects bookService by constructor
 
 
     @GetMapping fun getAll(pageable: Pageable): Page<Book> = bookService.getAll(pageable)
@@ -24,6 +26,7 @@ class BookController (private val bookService: BookService) {//injects bookServi
 
     @PostMapping fun insert(@RequestBody book: Book): Book = bookService.insert(book)
 
+    @PostMapping("/publish") fun sendMessage(@RequestBody book: Book) : String = messageProducer.sendBookDetails(book)
 
     @PutMapping fun update(@RequestBody book: Book): Book = bookService.update(book)
 
