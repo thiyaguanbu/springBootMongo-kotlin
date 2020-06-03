@@ -16,7 +16,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 class UserappApplication(private val userMongoRepository : UserMongoRepository, private val bookDAO: BookDAO, private val authorDAO: AuthorDAO): ApplicationRunner {
 	/* This will run after springboot full load*/
 	override fun run(args: ApplicationArguments?) {
-		if(bookDAO.count()<1) this.createBooks()
+		if(bookDAO.count()<5) this.createBooks()
 	}
 
 
@@ -33,6 +33,7 @@ class UserappApplication(private val userMongoRepository : UserMongoRepository, 
 				Book(isbn = "9780553579901", name = "A clash of kings", publishedYear = 2005, author = george),
 				Book(isbn = "9780618260553", name = "The Return of the King", publishedYear = 2002, author = tolkien)
 		)
+		books.forEach { println(it.toString()) }
 		bookDAO.insert(books)
 	}
 
